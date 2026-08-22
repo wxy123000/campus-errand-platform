@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Review - Leeds Campus Errand</title>
+    <link rel="stylesheet" href="/styles.css?v=20260820-ui-refresh1">
+</head>
+<body class="dashboard-body">
+<main class="home-shell">
+    <section class="home-panel order-home-panel">
+        <header class="home-topbar">
+            <div class="home-brand">
+                <div class="home-brand-badge">CE</div>
+                <div>
+                    <p class="eyebrow">Leeds Campus Errand</p>
+                    <h1>Runner Review</h1>
+                </div>
+            </div>
+            <div class="home-top-actions">
+                <a class="ghost-btn inline-link" href="/orders.html">Back to My Orders</a>
+                <button id="logout-btn" class="primary-btn" type="button">Log out</button>
+            </div>
+        </header>
+
+        <section class="home-main-grid single-column-layout">
+            <section class="home-types-card order-form-card wide-order-form-card">
+                <div class="section-title-row">
+                    <div>
+                        <p class="eyebrow">Review Form</p>
+                        <h3>Rate Your Runner</h3>
+                    </div>
+                </div>
+
+                <div class="order-detail-grid">
+                    <div><span>Order Number</span><strong id="review-order-no">-</strong></div>
+                    <div><span>Runner</span><strong id="review-runner-name">-</strong></div>
+                    <div><span>Order Type</span><strong id="review-order-type">-</strong></div>
+                    <div><span>Completed At</span><strong id="review-completed-at">-</strong></div>
+                </div>
+
+                <form id="review-form" class="auth-form profile-editor-form">
+                    <div class="wide-field">
+                        <label>Runner Score</label>
+                        <div class="filter-chip-row review-score-row">
+                            <label class="filter-chip"><input type="radio" name="runnerScore" value="1"> 1</label>
+                            <label class="filter-chip"><input type="radio" name="runnerScore" value="2"> 2</label>
+                            <label class="filter-chip"><input type="radio" name="runnerScore" value="3"> 3</label>
+                            <label class="filter-chip"><input type="radio" name="runnerScore" value="4"> 4</label>
+                            <label class="filter-chip"><input type="radio" name="runnerScore" value="5"> 5</label>
+                        </div>
+                    </div>
+                    <label class="wide-field">
+                        <span>Comment</span>
+                        <textarea id="review-comment-input" name="comment" rows="6" placeholder="Write your review for the runner here..." required></textarea>
+                    </label>
+                    <div id="review-submit-row" class="wide-field order-submit-row" hidden>
+                        <button class="primary-btn" type="submit">Submit Review</button>
+                        <div id="review-message" class="message-box" hidden></div>
+                    </div>
+                </form>
+            </section>
+        </section>
+    </section>
+</main>
+
+<script src="/app.js?v=20260807-order-privacy1"></script>
+</body>
+</html>

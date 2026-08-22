@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.campuserrand.mapper.AuthMapper">
+    <sql id="UserColumns">
+        id, username, password, phone, role, email, verified,
+        common_address AS commonAddress, detail_address AS detailAddress,
+        points, starter_points_granted AS starterPointsGranted, last_weekly_claim_at AS lastWeeklyClaimAt,
+        weekly_card_expires_at AS weeklyCardExpiresAt,
+        invite_code AS inviteCode, referred_by_user_id AS referredByUserId,
+        runner_application_status AS runnerApplicationStatus,
+        runner_application_requested_at AS runnerApplicationRequestedAt,
+        runner_application_reviewed_at AS runnerApplicationReviewedAt,
+        banned, ban_reason AS banReason, banned_at AS bannedAt,
+        cancellation_count AS cancellationCount, runner_give_up_count AS runnerGiveUpCount,
+        created_at AS createdAt, updated_at AS updatedAt
+    </sql>
+
+    <select id="findUserByEmail" resultType="com.campus.campuserrand.entity.User">
+        SELECT <include refid="UserColumns" />
+        FROM `user`
+        WHERE email = #{email}
+        LIMIT 1
+    </select>
+
+    <insert id="insertUser" parameterType="com.campus.campuserrand.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user` (
+            username, password, phone, role, email, verified, common_address, detail_address, points,
+            starter_points_granted, last_weekly_claim_at, weekly_card_expires_at, invite_code, referred_by_user_id,
+            runner_application_status, runner_application_requested_at, runner_application_reviewed_at,
+            banned, ban_reason, banned_at, cancellation_count, runner_give_up_count
+        )
+        VALUES (
+            #{username}, #{password}, #{phone}, #{role}, #{email}, #{verified}, #{commonAddress}, #{detailAddress}, #{points},
+            #{starterPointsGranted}, #{lastWeeklyClaimAt}, #{weeklyCardExpiresAt}, #{inviteCode}, #{referredByUserId},
+            #{runnerApplicationStatus}, #{runnerApplicationRequestedAt}, #{runnerApplicationReviewedAt},
+            #{banned}, #{banReason}, #{bannedAt}, #{cancellationCount}, #{runnerGiveUpCount}
+        )
+    </insert>
+
+    <update id="updateUser" parameterType="com.campus.campuserrand.entity.User">
+        UPDATE `user`
+        SET password = #{password}, verified = #{verified}, username = #{username}, phone = #{phone}, role = #{role}, email = #{email},
+            common_address = #{commonAddress}, detail_address = #{detailAddress}, points = #{points},
+            starter_points_granted = #{starterPointsGranted},
+            last_weekly_claim_at = #{lastWeeklyClaimAt},
+            weekly_card_expires_at = #{weeklyCardExpiresAt},
+            invite_code = #{inviteCode}, referred_by_user_id = #{referredByUserId},
+            runner_application_status = #{runnerApplicationStatus},
+            runner_application_requested_at = #{runnerApplicationRequestedAt},
+            runner_application_reviewed_at = #{runnerApplicationReviewedAt},
+            banned = #{banned},
+            ban_reason = #{banReason},
+            banned_at = #{bannedAt},
+            cancellation_count = #{cancellationCount},
+            runner_give_up_count = #{runnerGiveUpCount},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insertVerificationCode" parameterType="com.campus.campuserrand.entity.VerificationCode">
+        INSERT INTO email_verification_code (email, code, purpose, expires_at)
+        VALUES (#{email}, #{code}, #{purpose}, #{expiresAt})
+    </insert>
+
+    <delete id="deleteVerificationCodes">
+        DELETE FROM email_verification_code
+        WHERE email = #{email} AND purpose = #{purpose}
+    </delete>
+
+    <select id="findLatestCode" resultType="com.campus.campuserrand.entity.VerificationCode">
+        SELECT id, email, code, purpose, expires_at AS expiresAt, used_at AS usedAt, created_at AS createdAt
+        FROM email_verification_code
+        WHERE email = #{email} AND purpose = #{purpose}
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
+
+    <update id="markCodeUsed">
+        UPDATE email_verification_code SET used_at = NOW() WHERE id = #{id}
+    </update>
+
+    <insert id="insertSession" parameterType="com.campus.campuserrand.entity.UserSession" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user_session (user_id, token, expires_at)
+        VALUES (#{userId}, #{token}, #{expiresAt})
+    </insert>
+
+    <select id="findSessionByToken" resultType="com.campus.campuserrand.entity.UserSession">
+        SELECT id, user_id AS userId, token, expires_at AS expiresAt, created_at AS createdAt
+        FROM user_session
+        WHERE token = #{token}
+        LIMIT 1
+    </select>
+
+    <select id="findUserById" resultType="com.campus.campuserrand.entity.User">
+        SELECT <include refid="UserColumns" />
+        FROM `user`
+        WHERE id = #{id}
+        LIMIT 1
+    </select>
+
+    <delete id="deleteSessionsByUserId">
+        DELETE FROM user_session WHERE user_id = #{userId}
+    </delete>
+
+    <update id="updateProfile" parameterType="com.campus.campuserrand.entity.User">
+        UPDATE `user`
+        SET username = #{username},
+            phone = #{phone},
+            common_address = #{commonAddress},
+            detail_address = #{detailAddress},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="findUserByInviteCode" resultType="com.campus.campuserrand.entity.User">
+        SELECT <include refid="UserColumns" />
+        FROM `user`
+        WHERE invite_code = #{inviteCode}
+        LIMIT 1
+    </select>
+
+    <update id="addPoints">
+        UPDATE `user` SET points = points + #{points}, updated_at = NOW() WHERE id = #{userId}
+    </update>
+
+    <update id="deductPointsIfEnough">
+        UPDATE `user`
+        SET points = points - #{points},
+            updated_at = NOW()
+        WHERE id = #{userId} AND points &gt;= #{points}
+    </update>
+
+    <update id="claimWeeklyPoints">
+        UPDATE `user`
+        SET points = points + #{points},
+            last_weekly_claim_at = NOW(),
+            updated_at = NOW()
+        WHERE id = #{userId}
+    </update>
+
+    <update id="activateWeeklyCard">
+        UPDATE `user`
+        SET points = points - #{cost},
+            weekly_card_expires_at = #{expiresAt},
+            updated_at = NOW()
+        WHERE id = #{userId}
+          AND points &gt;= #{cost}
+          AND (weekly_card_expires_at IS NULL OR weekly_card_expires_at &lt; NOW())
+    </update>
+
+    <select id="findInviteRecordsByUserId" resultType="com.campus.campuserrand.dto.InviteRecordItem">
+        SELECT id AS userId,
+               username,
+               email,
+               25 AS rewardPoints,
+               created_at AS registeredAt
+        FROM `user`
+        WHERE referred_by_user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findPointTransactionsByUserId" resultType="com.campus.campuserrand.entity.PointTransaction">
+        SELECT id,
+               user_id AS userId,
+               change_amount AS changeAmount,
+               balance_after AS balanceAfter,
+               transaction_type AS transactionType,
+               description,
+               order_no AS orderNo,
+               created_at AS createdAt
+        FROM point_transaction
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC, id DESC
+        LIMIT 50
+    </select>
+
+    <insert id="insertPointTransaction">
+        INSERT INTO point_transaction (
+            user_id, change_amount, balance_after, transaction_type, description, order_no
+        )
+        VALUES (
+            #{userId}, #{changeAmount}, #{balanceAfter}, #{transactionType}, #{description}, #{orderNo}
+        )
+    </insert>
+
+    <update id="updateUserRole">
+        UPDATE `user`
+        SET role = #{role},
+            runner_application_status = CASE
+                WHEN #{role} = 'RUNNER' THEN 'APPROVED'
+                WHEN #{role} = 'user' THEN 'NONE'
+                ELSE runner_application_status
+            END,
+            runner_application_reviewed_at = CASE
+                WHEN #{role} IN ('RUNNER', 'user') THEN NOW()
+                ELSE runner_application_reviewed_at
+            END,
+            updated_at = NOW()
+        WHERE id = #{userId}
+    </update>
+
+    <update id="updateRunnerApplicationStatus">
+        UPDATE `user`
+        SET runner_application_status = #{status},
+            runner_application_requested_at = CASE
+                WHEN #{status} = 'PENDING' THEN NOW()
+                ELSE runner_application_requested_at
+            END,
+            runner_application_reviewed_at = CASE
+                WHEN #{status} IN ('APPROVED', 'REJECTED', 'NONE') THEN NOW()
+                ELSE runner_application_reviewed_at
+            END,
+            updated_at = NOW()
+        WHERE id = #{userId}
+    </update>
+
+    <update id="incrementCancellationCount">
+        UPDATE `user` SET cancellation_count = cancellation_count + 1, updated_at = NOW() WHERE id = #{userId}
+    </update>
+
+    <update id="incrementRunnerGiveUpCount">
+        UPDATE `user` SET runner_give_up_count = runner_give_up_count + 1, updated_at = NOW() WHERE id = #{userId}
+    </update>
+
+    <update id="deductPenaltyPoints">
+        UPDATE `user`
+        SET points = GREATEST(points - #{points}, 0),
+            updated_at = NOW()
+        WHERE id = #{userId}
+    </update>
+
+    <update id="banUser">
+        UPDATE `user`
+        SET banned = 1,
+            ban_reason = #{reason},
+            banned_at = NOW(),
+            cancellation_count = 0,
+            runner_give_up_count = 0,
+            updated_at = NOW()
+        WHERE id = #{userId}
+    </update>
+
+    <update id="unbanUser">
+        UPDATE `user`
+        SET banned = 0,
+            ban_reason = NULL,
+            banned_at = NULL,
+            updated_at = NOW()
+        WHERE id = #{userId}
+    </update>
+</mapper>

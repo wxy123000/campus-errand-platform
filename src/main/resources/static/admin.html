@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin System - Leeds Campus Errand</title>
+    <link rel="stylesheet" href="/styles.css?v=20260820-ui-refresh1">
+</head>
+<body class="admin-body">
+<main class="admin-layout">
+    <aside class="admin-sidebar">
+        <div class="admin-sidebar-brand">
+            <div class="admin-sidebar-icon">AD</div>
+            <strong>Admin System</strong>
+        </div>
+        <nav class="admin-nav">
+            <button class="admin-nav-item active" type="button" data-admin-view="dashboard">Dashboard</button>
+            <button class="admin-nav-item" type="button" data-admin-view="orders">Order Management</button>
+            <button class="admin-nav-item" type="button" data-admin-view="users">User Management</button>
+            <button class="admin-nav-item" type="button" data-admin-view="reviews">Rating Management</button>
+        </nav>
+        <div class="admin-sidebar-version">Version 1.0.0</div>
+    </aside>
+
+    <section class="admin-workspace">
+        <header class="admin-topbar">
+            <h1 id="admin-page-title">Dashboard</h1>
+            <div class="admin-account">
+                <span id="admin-user-name">AD</span>
+                <strong>Admin</strong>
+                <button id="logout-btn" class="admin-text-btn" type="button">Log out</button>
+            </div>
+        </header>
+
+        <section class="admin-content">
+            <div class="admin-page-head">
+                <div>
+                    <p class="eyebrow">Campus Errand Admin</p>
+                    <h2 id="admin-section-title">Dashboard</h2>
+                </div>
+                <div class="admin-page-actions">
+                    <button id="admin-create-btn" class="primary-btn" type="button">Create</button>
+                    <button id="refresh-admin-btn" class="ghost-btn" type="button">Refresh</button>
+                </div>
+            </div>
+
+            <div id="admin-message" class="message-box success" hidden></div>
+
+            <section id="admin-dashboard-view" class="admin-view">
+                <div class="admin-stat-board">
+                    <article><span>Total Users</span><strong id="admin-total-users">0</strong></article>
+                    <article><span>Runners</span><strong id="admin-runner-users">0</strong></article>
+                    <article><span>Admins</span><strong id="admin-admin-users">0</strong></article>
+                    <article><span>Total Orders</span><strong id="admin-total-orders">0</strong></article>
+                    <article><span>Active Orders</span><strong id="admin-active-orders">0</strong></article>
+                    <article><span>Completed Orders</span><strong id="admin-completed-orders">0</strong></article>
+                    <article><span>Cancelled Orders</span><strong id="admin-cancelled-orders">0</strong></article>
+                    <article><span>Banned Users</span><strong id="admin-banned-users">0</strong></article>
+                    <article><span>Open Appeals</span><strong id="admin-open-appeals">0</strong></article>
+                    <article><span>Points Spent</span><strong id="admin-points-spent">0</strong></article>
+                </div>
+            </section>
+
+            <section id="admin-users-view" class="admin-view hidden-panel">
+                <div class="admin-filter-bar">
+                    <input id="admin-user-search" class="admin-control" type="search" placeholder="Search name, email, or phone">
+                    <select id="admin-user-role-filter" class="admin-control">
+                        <option value="ALL">Filter Role</option>
+                        <option value="USER">User</option>
+                        <option value="RUNNER">Runner</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
+                    <button id="admin-bulk-ban-users" class="ghost-btn" type="button">Ban Selected</button>
+                    <button id="admin-bulk-unban-users" class="ghost-btn" type="button">Unban Selected</button>
+                    <button id="admin-bulk-delete-users" class="ghost-btn" type="button">Delete Selected</button>
+                </div>
+                <div class="admin-table-card">
+                    <table class="admin-table">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" disabled></th>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Runner Application</th>
+                            <th>Points</th>
+                            <th>Status</th>
+                            <th>Penalties</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="admin-user-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="admin-orders-view" class="admin-view hidden-panel">
+                <div class="admin-filter-bar">
+                    <input id="admin-order-search" class="admin-control" type="search" placeholder="Search order number, user, or address">
+                    <select id="admin-order-filter" class="admin-control">
+                        <option value="ALL">Filter Status</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="DELIVERED">Completed</option>
+                        <option value="CANCELLED">Cancelled</option>
+                        <option value="APPEAL_OPEN">Open Appeals</option>
+                    </select>
+                    <button id="admin-bulk-cancel-orders" class="ghost-btn" type="button">Cancel Selected</button>
+                    <button id="admin-bulk-delete-orders" class="ghost-btn" type="button">Delete Selected</button>
+                </div>
+                <div class="admin-table-card">
+                    <table class="admin-table">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" disabled></th>
+                            <th>Order No.</th>
+                            <th>Type</th>
+                            <th>Customer</th>
+                            <th>Runner</th>
+                            <th>Pickup</th>
+                            <th>Delivery</th>
+                            <th>Points</th>
+                            <th>Status</th>
+                            <th>Appeal</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="admin-order-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="admin-reviews-view" class="admin-view hidden-panel">
+                <div class="admin-filter-bar">
+                    <input id="admin-review-search" class="admin-control" type="search" placeholder="Search order number, user, or review">
+                    <select id="admin-review-filter" class="admin-control">
+                        <option value="ALL">All Ratings</option>
+                        <option value="RATED">Rated</option>
+                        <option value="UNRATED">Unrated</option>
+                    </select>
+                </div>
+                <div class="admin-table-card">
+                    <table class="admin-table">
+                        <thead>
+                        <tr>
+                            <th>Order No.</th>
+                            <th>Customer</th>
+                            <th>Runner</th>
+                            <th>Order Type</th>
+                            <th>Rating</th>
+                            <th>Review</th>
+                            <th>Reviewed At</th>
+                        </tr>
+                        </thead>
+                        <tbody id="admin-review-list"></tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+    </section>
+</main>
+
+<div id="admin-modal" class="admin-modal hidden-panel">
+    <div class="admin-modal-backdrop" data-admin-close-modal="true"></div>
+    <section class="admin-modal-card">
+        <button class="modal-close-btn" type="button" data-admin-close-modal="true">x</button>
+        <h3 id="admin-modal-title">Edit</h3>
+        <form id="admin-modal-form" class="admin-modal-form"></form>
+    </section>
+</div>
+
+<script src="/app.js?v=20260807-order-privacy1"></script>
+</body>
+</html>

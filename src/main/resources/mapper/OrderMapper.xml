@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.campuserrand.mapper.OrderMapper">
+    <sql id="OrderColumns">
+        eo.id, eo.user_id AS userId, eo.runner_id AS runnerId,
+        cu.username AS customerUsername, cu.phone AS customerPhone,
+        ru.username AS runnerUsername, ru.phone AS runnerPhone,
+        eo.order_no AS orderNo, eo.order_type AS orderType, eo.order_type_label AS orderTypeLabel,
+        eo.pickup_method AS pickupMethod, eo.pickup_location AS pickupLocation, eo.pickup_notes AS pickupNotes,
+        eo.delivery_location AS deliveryLocation,
+        eo.delivery_method AS deliveryMethod, eo.delivery_pin AS deliveryPin, eo.delivery_proof_status AS deliveryProofStatus,
+        eo.photo_proof_url AS photoProofUrl, eo.photo_proof_note AS photoProofNote,
+        eo.time_window_type AS timeWindowType, eo.time_window_label AS timeWindowLabel,
+        eo.preferred_latest_time AS preferredLatestTime, eo.base_fee AS baseFee, eo.distance_fee AS distanceFee,
+        eo.urgency_fee AS urgencyFee, eo.complexity_fee AS complexityFee, eo.tip_fee AS tipFee,
+        eo.weekly_card_discount_fee AS weeklyCardDiscountFee, eo.total_fee AS totalFee,
+        eo.points_cost AS pointsCost, eo.status, eo.status_label AS statusLabel, eo.cancel_reason AS cancelReason,
+        eo.cancelled_at AS cancelledAt, eo.customer_confirmed_at AS customerConfirmedAt, eo.points_transferred_at AS pointsTransferredAt,
+        eo.runner_review_score AS runnerReviewScore, eo.review_comment AS reviewComment, eo.reviewed_at AS reviewedAt,
+        eo.appeal_status AS appealStatus, eo.appeal_reason AS appealReason, eo.appeal_resolution AS appealResolution,
+        eo.appeal_created_at AS appealCreatedAt, eo.appeal_resolved_at AS appealResolvedAt,
+        eo.created_at AS createdAt, eo.updated_at AS updatedAt
+    </sql>
+
+    <sql id="OrderJoins">
+        FROM errand_order eo
+        LEFT JOIN `user` cu ON eo.user_id = cu.id
+        LEFT JOIN `user` ru ON eo.runner_id = ru.id
+    </sql>
+
+    <insert id="insertOrder" parameterType="com.campus.campuserrand.entity.ErrandOrder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO errand_order (
+            user_id, runner_id, order_no, order_type, order_type_label, pickup_method, pickup_location, pickup_notes,
+            delivery_location,
+            delivery_method, delivery_pin, delivery_proof_status, photo_proof_url, photo_proof_note, time_window_type, time_window_label,
+            preferred_latest_time, base_fee, distance_fee, urgency_fee, complexity_fee, tip_fee, weekly_card_discount_fee, total_fee, points_cost,
+            status, status_label, cancel_reason, cancelled_at, customer_confirmed_at, points_transferred_at
+        ) VALUES (
+            #{userId}, #{runnerId}, #{orderNo}, #{orderType}, #{orderTypeLabel}, #{pickupMethod}, #{pickupLocation}, #{pickupNotes},
+            #{deliveryLocation},
+            #{deliveryMethod}, #{deliveryPin}, #{deliveryProofStatus}, #{photoProofUrl}, #{photoProofNote}, #{timeWindowType}, #{timeWindowLabel},
+            #{preferredLatestTime}, #{baseFee}, #{distanceFee}, #{urgencyFee}, #{complexityFee}, #{tipFee}, #{weeklyCardDiscountFee}, #{totalFee}, #{pointsCost},
+            #{status}, #{statusLabel}, #{cancelReason}, #{cancelledAt}, #{customerConfirmedAt}, #{pointsTransferredAt}
+        )
+    </insert>
+
+    <select id="findOrdersByUserId" resultType="com.campus.campuserrand.entity.ErrandOrder">
+        SELECT <include refid="OrderColumns" />
+        <include refid="OrderJoins" />
+        WHERE eo.user_id = #{userId}
+        ORDER BY eo.created_at DESC
+    </select>
+
+    <select id="findOrderByOrderNoAndUserId" resultType="com.campus.campuserrand.entity.ErrandOrder">
+        SELECT <include refid="OrderColumns" />
+        <include refid="OrderJoins" />
+        WHERE eo.order_no = #{orderNo} AND eo.user_id = #{userId}
+        LIMIT 1
+    </select>
+
+    <update id="updateOrderStatus" parameterType="com.campus.campuserrand.entity.ErrandOrder">
+        UPDATE errand_order
+        SET status = #{status}, status_label = #{statusLabel}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateDeliveryCompletion" parameterType="com.campus.campuserrand.entity.ErrandOrder">
+        UPDATE errand_order
+        SET status = #{status},
+            status_label = #{statusLabel},
+            delivery_proof_status = #{deliveryProofStatus},
+            photo_proof_url = #{photoProofUrl},
+            photo_proof_note = #{photoProofNote},
+            customer_confirmed_at = #{customerConfirmedAt},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="findAvailableOrders" resultType="com.campus.campuserrand.entity.ErrandOrder">
+        SELECT <include refid="OrderColumns" />
+        <include refid="OrderJoins" />
+        WHERE eo.status = 'PLACED' AND eo.runner_id IS NULL AND eo.user_id &lt;&gt; #{runnerId}
+        ORDER BY eo.created_at DESC
+    </select>
+
+    <select id="findOrdersByRunnerId" resultType="com.campus.campuserrand.entity.ErrandOrder">
+        SELECT <include refid="OrderColumns" />
+        <include refid="OrderJoins" />
+        WHERE eo.runner_id = #{runnerId}
+        ORDER BY eo.created_at DESC
+    </select>
+
+    <select id="findOrderByOrderNo" resultType="com.campus.campuserrand.entity.ErrandOrder">
+        SELECT <include refid="OrderColumns" />
+        <include refid="OrderJoins" />
+        WHERE eo.order_no = #{orderNo}
+        LIMIT 1
+    </select>
+
+    <update id="acceptOrder">
+        UPDATE errand_order
+        SET runner_id = #{runnerId},
+            status = #{status},
+            status_label = #{statusLabel},
+            updated_at = NOW()
+        WHERE id = #{id} AND runner_id IS NULL AND status = 'PLACED'
+    </update>
+
+    <select id="findOrderByOrderNoAndRunnerId" resultType="com.campus.campuserrand.entity.ErrandOrder">
+        SELECT <include refid="OrderColumns" />
+        <include refid="OrderJoins" />
+        WHERE eo.order_no = #{orderNo} AND eo.runner_id = #{runnerId}
+        LIMIT 1
+    </select>
+
+    <select id="findOrdersReadyForPointsTransfer" resultType="com.campus.campuserrand.entity.ErrandOrder">
+        SELECT eo.id, eo.user_id AS userId, eo.runner_id AS runnerId,
+               eo.order_no AS orderNo, eo.points_cost AS pointsCost,
+               eo.status, eo.points_transferred_at AS pointsTransferredAt
+        FROM errand_order eo
+        WHERE eo.status = 'DELIVERED' AND eo.runner_id IS NOT NULL AND eo.points_transferred_at IS NULL
+    </select>
+
+    <update id="giveUpOrder">
+        UPDATE errand_order
+        SET status = 'PLACED',
+            status_label = 'Placed',
+            runner_id = NULL,
+            updated_at = NOW()
+        WHERE id = #{id} AND runner_id = #{runnerId} AND status = 'ACCEPTED'
+    </update>
+
+    <update id="cancelOrderByCustomer">
+        UPDATE errand_order
+        SET status = 'CANCELLED_BY_CUSTOMER',
+            status_label = 'Cancelled by Customer',
+            runner_id = NULL,
+            cancel_reason = #{reason},
+            cancelled_at = NOW(),
+            updated_at = NOW()
+        WHERE id = #{id} AND user_id = #{userId} AND status IN ('PLACED', 'ACCEPTED')
+    </update>
+
+    <update id="confirmPhotoProofOrder">
+        UPDATE errand_order
+        SET status = 'DELIVERED',
+            status_label = 'Delivered',
+            delivery_proof_status = 'CUSTOMER_CONFIRMED',
+            customer_confirmed_at = NOW(),
+            updated_at = NOW()
+        WHERE id = #{id} AND user_id = #{userId} AND status = 'AWAITING_CUSTOMER_CONFIRMATION'
+    </update>
+
+    <update id="submitOrderReview">
+        UPDATE errand_order
+        SET runner_review_score = #{runnerScore},
+            review_comment = #{comment},
+            reviewed_at = NOW(),
+            updated_at = NOW()
+        WHERE id = #{id}
+          AND user_id = #{userId}
+          AND status = 'DELIVERED'
+          AND runner_review_score IS NULL
+    </update>
+
+    <update id="submitAppeal">
+        UPDATE errand_order
+        SET appeal_status = 'OPEN',
+            appeal_reason = #{reason},
+            appeal_resolution = NULL,
+            appeal_created_at = NOW(),
+            appeal_resolved_at = NULL,
+            updated_at = NOW()
+        WHERE id = #{id}
+          AND status = 'DELIVERED'
+          AND appeal_status &lt;&gt; 'OPEN'
+    </update>
+
+    <update id="autoConfirmTimedOutOrders">
+        UPDATE errand_order
+        SET status = 'DELIVERED',
+            status_label = 'Delivered',
+            delivery_proof_status = 'AUTO_CONFIRMED',
+            customer_confirmed_at = NOW(),
+            updated_at = NOW()
+        WHERE status = 'AWAITING_CUSTOMER_CONFIRMATION' AND updated_at &lt;= #{deadline}
+    </update>
+
+    <update id="markPointsTransferred">
+        UPDATE errand_order
+        SET points_transferred_at = NOW(),
+            updated_at = NOW()
+        WHERE id = #{orderId} AND status = 'DELIVERED' AND runner_id IS NOT NULL AND points_transferred_at IS NULL
+    </update>
+
+    <select id="countIncompleteRunnerOrders" resultType="int">
+        SELECT COUNT(1)
+        FROM errand_order
+        WHERE runner_id = #{runnerId} AND status IN ('ACCEPTED', 'PICKED_UP', 'AWAITING_CUSTOMER_CONFIRMATION')
+    </select>
+</mapper>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Center - Leeds Campus Errand</title>
+    <link rel="stylesheet" href="/styles.css?v=20260820-ui-refresh1">
+</head>
+<body class="dashboard-body order-center-page">
+<main class="home-shell">
+    <section class="home-panel order-home-panel">
+        <header class="home-topbar">
+            <div class="home-brand">
+                <div class="home-brand-badge">CE</div>
+                <div>
+                    <p class="eyebrow">Leeds Campus Errand</p>
+                    <h1>Order Center</h1>
+                </div>
+            </div>
+            <div class="home-top-actions">
+                <a id="admin-center-link" class="ghost-btn inline-link hidden-panel" href="/admin.html">Admin Console</a>
+                <a id="home-runner-link" class="ghost-btn inline-link hidden-panel" href="/runner.html">Runner Hall</a>
+                <a id="home-runner-orders-link" class="ghost-btn inline-link hidden-panel" href="/runner-orders.html">My Accepted Orders</a>
+                <a class="ghost-btn inline-link" href="/orders.html">My Orders</a>
+                <a class="ghost-btn inline-link" href="/profile.html">Profile Center</a>
+                <button id="logout-btn" class="primary-btn" type="button">Log out</button>
+            </div>
+        </header>
+
+        <section class="order-home-hero">
+            <div class="home-hero-copy">
+                <span class="hero-tag">LIVE ORDERING</span>
+                <h2>Hello, <span id="home-user-name">Campus User</span></h2>
+                <p id="home-session-tip">Create an errand order, choose how the pickup should be handled, and review the points estimate before placing the request.</p>
+                <div class="home-hero-stats">
+                    <article>
+                        <strong>2</strong>
+                        <span>Order Types</span>
+                    </article>
+                    <article>
+                        <strong>2</strong>
+                        <span>Delivery Verification Options</span>
+                    </article>
+                    <article>
+                        <strong>24h</strong>
+                        <span>Session Access After Login</span>
+                    </article>
+                </div>
+                <div class="home-hero-note">
+                    Use the form below to place a real order. Pickup notes are required, and the runner only sees the delivery PIN after the order is completed.
+                </div>
+            </div>
+
+            <aside class="order-guide-card">
+                <div class="section-title-row">
+                    <div>
+                        <p class="eyebrow">Ordering Rules</p>
+                        <h3>How This Flow Works</h3>
+                    </div>
+                </div>
+                <div class="order-guide-grid">
+                    <article>
+                        <strong>Pickup Info</strong>
+                        <p>Choose current location or manual entry. Pickup notes are required for every order.</p>
+                    </article>
+                    <article>
+                        <strong>Delivery Check</strong>
+                        <p>Every order uses in-person PIN verification. The runner enters the PIN at handover and sees it only after completion.</p>
+                    </article>
+                    <article>
+                        <strong>Time Window</strong>
+                        <p>Select ASAP or within 1 hour for the delivery window.</p>
+                    </article>
+                    <article>
+                        <strong>Virtual Points</strong>
+                        <p>The order preview uses a simulated points formula without real payment integration.</p>
+                    </article>
+                </div>
+            </aside>
+        </section>
+
+        <section class="home-main-grid order-page-grid single-column-layout">
+            <section class="home-types-card order-form-card wide-order-form-card">
+                <div class="section-title-row">
+                    <div>
+                        <p class="eyebrow">Create Order</p>
+                        <h3>New Campus Errand</h3>
+                    </div>
+                </div>
+
+                <div class="order-form-banner">
+                    <div>
+                        <span>Step 1</span>
+                        <strong>Choose a task type</strong>
+                    </div>
+                    <div>
+                        <span>Step 2</span>
+                        <strong>Fill in pickup and delivery details</strong>
+                    </div>
+                    <div>
+                        <span>Step 3</span>
+                        <strong>Review points estimate and place the order</strong>
+                    </div>
+                </div>
+
+                <form id="order-form" class="auth-form order-form-layout">
+                    <div class="wide-field">
+                        <label>Order Type</label>
+                        <div class="order-type-grid interactive-order-grid">
+                            <button type="button" class="order-type-card type-collection selectable-order-card active" data-order-type="COLLECTION_TASK">
+                                <span class="type-icon">CT</span>
+                                <h4>Parcel Collection</h4>
+                                <p>Choose this when an item has already been paid for and only needs collecting, for example a parcel, takeaway meal, library item, or printed material.</p>
+                            </button>
+                            <button type="button" class="order-type-card type-delivery selectable-order-card" data-order-type="DELIVERY_DROPOFF_TASK">
+                                <span class="type-icon">DD</span>
+                                <h4>Item Purchase</h4>
+                                <p>Choose this when the runner needs to buy an item for you, for example groceries or daily essentials from a nearby shop. The item budget is limited to £15 and the runner uploads a receipt.</p>
+                            </button>
+                        </div>
+                        <input id="order-type-input" type="hidden" name="orderType" value="COLLECTION_TASK">
+                    </div>
+
+                    <label class="wide-field">
+                        Pickup Location
+                        <input id="pickup-location-input" name="pickupLocation" type="text" placeholder="Type the pickup address, desk, collection point, or shop name" required>
+                    </label>
+
+                    <label class="wide-field">
+                        Item Description
+                        <input name="pickupNotes" type="text" placeholder="Required: describe the item, quantity, size, and any special requirements" required>
+                    </label>
+
+                    <label class="wide-field">
+                        Delivery Location
+                        <div class="location-input-row">
+                            <input id="delivery-location-input" name="deliveryLocation" type="text" placeholder="Use your current location or type the final drop-off place, residence hall, office, or handover point" required>
+                            <button id="locate-btn" class="ghost-btn" type="button">Get Current Location</button>
+                        </div>
+                    </label>
+
+                    <input type="hidden" name="pickupMethod" value="CURRENT_LOCATION">
+
+                    <div>
+                        <label>Delivery Method</label>
+                        <div class="stacked-choice-grid">
+                            <label class="choice-card stacked-choice active-choice">
+                                <input type="radio" name="deliveryMethod" value="PIN_IN_PERSON" checked>
+                                <strong>PIN In-Person Delivery</strong>
+                                <span>The system generates a one-time PIN. The runner enters it at handover and sees it only after completion.</span>
+                            </label>
+                            <label class="choice-card stacked-choice">
+                                <input type="radio" name="deliveryMethod" value="LEAVE_AND_PHOTO">
+                                <strong>Leave and Photo Proof</strong>
+                                <span>The runner can leave the order at the drop-off point and upload proof details.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Time Window</label>
+                        <div class="stacked-choice-grid">
+                            <label class="choice-card stacked-choice active-choice">
+                                <input type="radio" name="timeWindowType" value="ASAP" checked>
+                                <strong>ASAP</strong>
+                                <span>Highest urgency for the fastest possible handling.</span>
+                            </label>
+                            <label class="choice-card stacked-choice">
+                                <input type="radio" name="timeWindowType" value="WITHIN_ONE_HOUR">
+                                <strong>Within 1 Hour</strong>
+                                <span>Urgent but slightly more flexible than ASAP.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <label>
+                        Optional Tip (Points)
+                        <input id="optional-tip-input" name="optionalTip" type="number" min="0" step="1" value="0">
+                    </label>
+
+                    <div class="wide-field order-total-row">
+                        <div>
+                            <span class="order-total-label">Estimated Total</span>
+                            <strong id="order-total-preview" class="fee-total inline-total">6 pts</strong>
+                        </div>
+                        <button id="amount-details-btn" class="ghost-btn" type="button">Points Details</button>
+                    </div>
+
+                    <div class="wide-field order-submit-row">
+                        <button class="primary-btn" type="submit">Place Order</button>
+                        <div id="order-message" class="message-box success" hidden></div>
+                    </div>
+                </form>
+            </section>
+        </section>
+    </section>
+</main>
+
+<div id="amount-modal" class="modal-shell hidden-panel">
+    <div class="modal-backdrop" data-close-modal="true"></div>
+    <div class="modal-card fee-modal-card">
+        <button id="close-amount-modal-btn" class="modal-close-btn" type="button">x</button>
+        <div class="section-title-row">
+            <div>
+                <p class="eyebrow">Points Preview</p>
+                <h3>Estimated Total</h3>
+            </div>
+            <strong id="modal-order-total-preview" class="fee-total">6 pts</strong>
+        </div>
+        <div class="fee-line-list">
+            <div><span>Base service points</span><strong id="fee-base">3 pts</strong></div>
+            <div><span>Fixed location points</span><strong id="fee-distance">2 pts</strong></div>
+            <div><span>Urgency points</span><strong id="fee-urgency">2 pts</strong></div>
+            <div><span>Optional tip</span><strong id="fee-tip">0 pts</strong></div>
+            <div><span>Weekly card discount</span><strong id="fee-weekly-card">0 pts</strong></div>
+        </div>
+        <p class="fee-footnote">This is a virtual points estimate based on task type, urgency, and pickup information.</p>
+    </div>
+</div>
+
+<script src="/app.js?v=20260817-usability1"></script>
+</body>
+</html>

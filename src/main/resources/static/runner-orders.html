@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Accepted Orders - Leeds Campus Errand</title>
+    <link rel="stylesheet" href="/styles.css?v=20260820-ui-refresh1">
+</head>
+<body class="dashboard-body">
+<main id="runner-guarded-content" class="home-shell hidden-panel">
+    <section class="home-panel order-home-panel">
+        <header class="home-topbar">
+            <div class="home-brand">
+                <div class="home-brand-badge">MO</div>
+                <div>
+                    <p class="eyebrow">Runner Workspace</p>
+                    <h1>My Accepted Orders</h1>
+                </div>
+            </div>
+            <div class="home-top-actions">
+                <a class="ghost-btn inline-link" href="/runner.html">Runner Hall</a>
+                <a class="ghost-btn inline-link" href="/home.html">Order Center</a>
+                <a class="ghost-btn inline-link" href="/profile.html">Profile Center</a>
+                <button id="logout-btn" class="primary-btn" type="button">Log out</button>
+            </div>
+        </header>
+
+        <section class="runner-workspace-grid">
+            <section class="home-types-card order-form-card runner-column-card runner-list-panel">
+                <div class="section-title-row">
+                    <div>
+                        <p class="eyebrow">My Accepted Orders</p>
+                        <h3>Orders Taken by Me</h3>
+                    </div>
+                    <button id="refresh-runner-orders-btn" class="ghost-btn" type="button">Refresh</button>
+                </div>
+                <div id="runner-my-list" class="live-order-list">
+                    <div class="invite-record-empty">You have not accepted any orders yet.</div>
+                </div>
+            </section>
+
+            <aside class="home-order-preview order-sidebar runner-detail-panel-wrap">
+                <section class="my-orders-live-card runner-detail-card">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">Order Detail</p>
+                            <h3>Selected Order</h3>
+                        </div>
+                    </div>
+                    <div id="runner-detail-empty" class="invite-record-empty">Click an order on the left to view its full detail.</div>
+                    <p class="first-use-help" role="note"><strong>Delivery guide:</strong> Update the order after pickup. For in-person delivery, ask the customer for the PIN at handover; for leave-and-photo delivery, upload clear proof at the agreed location.</p>
+                    <div class="policy-guide compact-policy-guide" aria-label="Runner verification and appeal rules">
+                        <p><strong>PIN:</strong> Enter the customer's one-time PIN only during the in-person handover. The order cannot be completed with an incorrect PIN.</p>
+                        <p><strong>Photo proof:</strong> For leave-and-photo delivery, upload a clear image showing that the item was left at the agreed location.</p>
+                        <p><strong>Appeals:</strong> An assigned runner may submit one appeal after an order is completed. A resolved appeal cannot be reopened, and the current prototype does not impose a separate appeal deadline.</p>
+                        <p><strong>Give-up rule:</strong> Giving up an accepted order deducts two points and is recorded for administrator review. Any three-day account restriction is applied manually by an administrator.</p>
+                    </div>
+                    <div id="runner-detail-panel" class="order-detail-panel hidden-panel">
+                        <div class="order-detail-grid">
+                            <div><span>Order Number</span><strong id="runner-detail-order-no">-</strong></div>
+                            <div><span>Status</span><strong id="runner-detail-status">-</strong></div>
+                            <div><span>Customer</span><strong id="runner-detail-customer-name">-</strong></div>
+                            <div><span>Customer Phone</span><strong id="runner-detail-customer-phone">-</strong></div>
+                            <div><span>Pickup Location</span><strong id="runner-detail-pickup-location">-</strong></div>
+                            <div><span>Delivery Location</span><strong id="runner-detail-delivery-location">-</strong></div>
+                            <div><span>Delivery Method</span><strong id="runner-detail-delivery-method">-</strong></div>
+                            <div><span>Time Window</span><strong id="runner-detail-time-window">-</strong></div>
+                            <div><span>Runner Score</span><strong id="runner-detail-runner-score">Not reviewed</strong></div>
+                            <div><span>Appeal Status</span><strong id="runner-detail-appeal-status">None</strong></div>
+                            <div class="detail-wide"><span>Pickup Notes</span><strong id="runner-detail-pickup-notes">-</strong></div>
+                            <div class="detail-wide"><span>Verification / Proof</span><strong id="runner-detail-verification">-</strong></div>
+                            <div class="detail-wide"><span>Customer Review Comment</span><strong id="runner-detail-review-comment">No review yet</strong></div>
+                            <div class="detail-wide"><span>Appeal Detail</span><strong id="runner-detail-appeal-detail">No appeal submitted</strong></div>
+                        </div>
+                        <div id="runner-detail-status-line" class="order-progress-line detail-progress-line"></div>
+                    </div>
+                </section>
+            </aside>
+        </section>
+
+        <div id="runner-message" class="message-box" hidden></div>
+    </section>
+</main>
+
+<script src="/app.js?v=20260818-english-file-picker1"></script>
+</body>
+</html>

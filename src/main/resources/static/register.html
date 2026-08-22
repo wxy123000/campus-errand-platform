@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Leeds Campus Errand</title>
+    <link rel="stylesheet" href="/styles.css?v=20260820-auth-restore1">
+</head>
+<body class="landing-body">
+<main class="auth-shell">
+    <section class="hero-panel register-hero">
+        <div class="brand-pill">Registration</div>
+        <h1>Create Your Campus Account</h1>
+        <p>Create a demonstration account using a University of Leeds email-format address and complete your profile.</p>
+        <ul class="rule-list">
+            <li>Only `@leeds.ac.uk` addresses are allowed</li>
+            <li>Demo codes are shown on this page and stay valid for 10 minutes</li>
+            <li>No real verification email is sent in demo mode</li>
+            <li>Login sessions stay active for 24 hours</li>
+            <li>Successful registration signs the user in automatically</li>
+        </ul>
+    </section>
+
+    <section class="form-panel">
+        <div class="tabs">
+            <a class="tab" href="/index.html">Login</a>
+            <a class="tab active" href="/register.html">Register</a>
+        </div>
+
+        <div class="form-card">
+            <div class="card-head">
+                <p class="eyebrow">Create Account</p>
+                <h2>Join Leeds Campus Errand</h2>
+                <p>Generate a demo code first, then complete your account details.</p>
+            </div>
+
+            <form id="register-form" class="auth-form">
+                <label>
+                    <span>Display Name</span>
+                    <input type="text" name="displayName" placeholder="e.g. Ava Zhang" required>
+                </label>
+                <label>
+                    <span>Campus Email</span>
+                    <div class="inline-field">
+                        <input type="email" name="email" placeholder="yourname@leeds.ac.uk" required>
+                        <button type="button" id="send-code-btn" class="ghost-btn">Get Demo Code</button>
+                    </div>
+                </label>
+                <label>
+                    <span>Verification Code</span>
+                    <input type="text" name="verificationCode" placeholder="Enter the 6-digit code" maxlength="6" required>
+                </label>
+                <label>
+                    <span>Phone Number</span>
+                    <input type="text" name="phone" placeholder="Enter your phone number" required>
+                </label>
+                <label>
+                    <span>Invite Code (Optional)</span>
+                    <input type="text" name="inviteCode" placeholder="Enter an invite code if someone referred you">
+                </label>
+                <label>
+                    <span>Password</span>
+                    <input type="password" name="password" placeholder="At least 6 characters" required>
+                </label>
+                <label>
+                    <span>Confirm Password</span>
+                    <input type="password" name="confirmPassword" placeholder="Enter the password again" required>
+                </label>
+                <button type="submit" class="primary-btn">Complete Registration</button>
+            </form>
+
+            <div id="register-message" class="message-box" hidden></div>
+
+            <div class="minor-link">
+                Already have an account? <a href="/index.html">Back to login</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="/app.js?v=20260807-order-privacy1"></script>
+</body>
+</html>

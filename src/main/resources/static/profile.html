@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Center - Leeds Campus Errand</title>
+    <link rel="stylesheet" href="/styles.css?v=20260820-ui-refresh1">
+</head>
+<body class="dashboard-body">
+<main class="profile-desktop-shell">
+    <section class="profile-desktop-panel">
+        <header class="profile-top-banner">
+            <div class="profile-banner-copy">
+                <p class="eyebrow">Profile Center</p>
+                <h1>Campus Personal Hub</h1>
+                <p>Desktop profile center with the same feature grouping as your reference: user summary, stats, assets, quick entries and editable personal information.</p>
+            </div>
+            <div class="profile-banner-actions">
+                <a class="ghost-btn inline-link" href="/home.html">Back to Dashboard</a>
+                <button id="logout-btn" class="primary-btn" type="button">Log out</button>
+            </div>
+        </header>
+
+        <div class="profile-desktop-grid">
+            <aside class="profile-summary-card">
+                <div class="profile-summary-head">
+                    <div class="avatar-badge" id="profile-avatar">LC</div>
+                    <div>
+                        <h2 id="profile-summary-name">Leeds User</h2>
+                        <p id="profile-summary-email">yourname@leeds.ac.uk</p>
+                        <span class="profile-summary-phone" id="profile-summary-phone">Phone hidden</span>
+                    </div>
+                </div>
+
+                <section class="feature-card">
+                    <div class="section-title-row">
+                        <h3>Menu</h3>
+                    </div>
+                    <div class="service-list profile-menu-list">
+                        <button type="button" class="profile-menu-button active" data-panel="overview-panel">Profile Overview</button>
+                        <button type="button" class="profile-menu-button" data-panel="edit-panel">Edit Personal Information</button>
+                        <button type="button" class="profile-menu-button" data-panel="points-panel">My Points</button>
+                        <button type="button" class="profile-menu-button" data-panel="orders-panel">Order Details</button>
+                        <button type="button" class="profile-menu-button" data-panel="invite-panel">Invite Friends</button>
+                        <button type="button" class="profile-menu-button" data-panel="runner-panel">Runner Access</button>
+                        <a id="admin-center-link" class="profile-hidden-link hidden-panel" href="/admin.html">Open Admin Console</a>
+                        <a id="runner-center-link" class="profile-hidden-link hidden-panel" href="/runner.html">Open Runner Hall</a>
+                        <a id="runner-orders-link" class="profile-hidden-link hidden-panel" href="/runner-orders.html">Open My Accepted Orders</a>
+                        <button type="button" class="profile-menu-button" data-panel="address-panel">Saved Address</button>
+                        <button type="button" class="profile-menu-button" data-panel="support-panel">Help Center</button>
+                        <button type="button" class="profile-menu-button" data-panel="feedback-panel">Issue Feedback</button>
+                    </div>
+                </section>
+            </aside>
+
+            <section class="profile-edit-card">
+                <section id="overview-panel" class="profile-content-panel">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">Profile Overview</p>
+                            <h2>Personal Information</h2>
+                        </div>
+                        <span class="profile-security-note">Select "Edit Personal Information" from the menu when you want to update your details.</span>
+                    </div>
+
+                    <div class="profile-highlight-row">
+                        <article>
+                            <span>Campus Email</span>
+                            <strong id="profile-email-preview">-</strong>
+                        </article>
+                        <article>
+                            <span>Common Address</span>
+                            <strong id="profile-address-preview">Not set</strong>
+                        </article>
+                        <article>
+                            <span>Phone</span>
+                            <strong id="profile-phone-preview">-</strong>
+                        </article>
+                        <article>
+                            <span>Detailed Address Notes</span>
+                            <strong id="profile-detail-preview">Not set</strong>
+                        </article>
+                        <article>
+                            <span>My Points</span>
+                            <strong id="profile-points-preview">0</strong>
+                        </article>
+                        <article>
+                            <span>My Invite Code</span>
+                            <strong id="profile-invite-preview">-</strong>
+                        </article>
+                        <article>
+                            <span>My Orders</span>
+                            <strong id="profile-orders-preview">0</strong>
+                        </article>
+                        <article>
+                            <span>Runner Average Score</span>
+                            <strong id="profile-runner-average-preview">-</strong>
+                        </article>
+                        <article>
+                            <span>Runner Completed Orders</span>
+                            <strong id="profile-runner-completed-preview">0</strong>
+                        </article>
+                        <article>
+                            <span>Current Role</span>
+                            <strong id="profile-role-preview">Customer</strong>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="edit-panel" class="profile-content-panel hidden-panel">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">Editable Profile</p>
+                            <h2>Edit Personal Information</h2>
+                        </div>
+                        <span class="profile-security-note">Detailed address is used only for order fulfillment and is not public by default.</span>
+                    </div>
+
+                    <form id="profile-form" class="auth-form profile-editor-form">
+                        <label>
+                            <span>Campus Email</span>
+                            <input type="email" id="profile-email-input" name="email" readonly>
+                        </label>
+                        <label>
+                            <span>Display Name</span>
+                            <input type="text" id="profile-username-input" name="username" placeholder="Enter your display name" required>
+                        </label>
+                        <label>
+                            <span>Phone</span>
+                            <input type="text" id="profile-phone-input" name="phone" placeholder="Enter your phone number" required>
+                        </label>
+                        <label>
+                            <span>Common Address</span>
+                            <input type="text" id="profile-common-address-input" name="commonAddress" placeholder="e.g. Liberty Dock / City Centre">
+                        </label>
+                        <label class="wide-field">
+                            <span>Detailed Address Notes</span>
+                            <input type="text" id="profile-detail-address-input" name="detailAddress" placeholder="e.g. Flat 3B, block C, near reception">
+                        </label>
+                        <button type="submit" class="primary-btn">Save Profile</button>
+                    </form>
+                </section>
+
+                <section id="points-panel" class="profile-content-panel hidden-panel">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">My Points</p>
+                            <h2>Points Center</h2>
+                        </div>
+                    </div>
+                    <div class="profile-highlight-row single-column">
+                        <article class="metric-hero-card">
+                            <span>Current Points</span>
+                            <strong id="points-panel-total">0</strong>
+                            <p>Your points are used to place orders. When an order is completed, the deducted points are settled to the runner.</p>
+                        </article>
+                        <article class="runner-action-card">
+                            <div>
+                                <span>Weekly Refresh</span>
+                                <strong id="weekly-refresh-status">Available every Monday for +15 points.</strong>
+                            </div>
+                            <button id="claim-weekly-points-btn" class="primary-btn" type="button">Claim Weekly 15 Points</button>
+                        </article>
+                        <article class="runner-action-card">
+                            <div>
+                                <span>Weekly Card</span>
+                                <strong id="weekly-card-status">Open a weekly card for 10 points and save 2 points on each order for 7 days.</strong>
+                            </div>
+                            <button id="activate-weekly-card-btn" class="ghost-btn" type="button">Open Weekly Card</button>
+                        </article>
+                        <article>
+                            <span>Starter Rule</span>
+                            <strong>Every newly registered user receives 20 starter points.</strong>
+                        </article>
+                        <article>
+                            <span>Invite Reward</span>
+                            <strong>Each successful invited registration gives you 25 points.</strong>
+                        </article>
+                        <article class="points-history-card">
+                            <div class="section-title-row compact-title-row">
+                                <div>
+                                    <span>Point History</span>
+                                    <strong>Recent point changes</strong>
+                                </div>
+                                <button id="refresh-point-history-btn" class="ghost-btn" type="button">Refresh</button>
+                            </div>
+                            <div id="point-history-list" class="point-history-list">
+                                <div class="invite-record-empty">Point history will appear here.</div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="orders-panel" class="profile-content-panel hidden-panel">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">Order Details</p>
+                            <h2>Order Summary</h2>
+                        </div>
+                    </div>
+                    <div class="profile-highlight-row single-column">
+                        <article class="metric-hero-card">
+                            <span>Total Orders</span>
+                            <strong id="orders-panel-total">0</strong>
+                            <p>Keep track of your current errands, completed deliveries and the next action you may need to take.</p>
+                        </article>
+                        <article>
+                            <span>Current Status</span>
+                            <strong id="orders-panel-status">No active order module yet</strong>
+                        </article>
+                        <article class="orders-summary-grid">
+                            <div class="orders-stat-card">
+                                <span>Accepted</span>
+                                <strong id="orders-panel-accepted">0</strong>
+                            </div>
+                            <div class="orders-stat-card">
+                                <span>Picked Up</span>
+                                <strong id="orders-panel-picked-up">0</strong>
+                            </div>
+                            <div class="orders-stat-card">
+                                <span>Awaiting Confirmation</span>
+                                <strong id="orders-panel-awaiting">0</strong>
+                            </div>
+                            <div class="orders-stat-card">
+                                <span>Completed</span>
+                                <strong id="orders-panel-completed">0</strong>
+                            </div>
+                        </article>
+                        <article class="orders-summary-grid">
+                            <div class="orders-stat-card">
+                                <span>Reviewed</span>
+                                <strong id="orders-panel-reviewed">0</strong>
+                            </div>
+                            <div class="orders-stat-card">
+                                <span>Not Reviewed</span>
+                                <strong id="orders-panel-not-reviewed">0</strong>
+                            </div>
+                            <div class="orders-stat-card">
+                                <span>Average Runner Score Given</span>
+                                <strong id="orders-panel-average-runner-score-given">-</strong>
+                            </div>
+                        </article>
+                        <article class="orders-next-action-card">
+                            <div>
+                                <span>Next Action</span>
+                                <strong id="orders-panel-next-action">No action needed right now.</strong>
+                            </div>
+                            <div class="orders-action-links">
+                                <a class="ghost-btn inline-link" href="/orders.html">Open My Orders</a>
+                                <a class="ghost-btn inline-link" href="/home.html">Place Another Order</a>
+                            </div>
+                        </article>
+                        <article>
+                            <span>Recent Orders</span>
+                            <div id="profile-recent-orders-list" class="profile-recent-orders-list">
+                                <div class="invite-record-empty">Your recent orders will appear here.</div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="invite-panel" class="profile-content-panel hidden-panel">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">Invite Friends</p>
+                            <h2>Invitation Center</h2>
+                        </div>
+                    </div>
+                    <div class="profile-highlight-row single-column">
+                        <article class="metric-hero-card">
+                            <span>Your Invite Code</span>
+                            <strong id="invite-panel-code">-</strong>
+                            <p>When another user enters this code during registration, you receive 25 points.</p>
+                        </article>
+                        <article class="invite-summary-grid">
+                            <div>
+                                <span>Total Invites</span>
+                                <strong id="invite-total-count">0</strong>
+                            </div>
+                            <div>
+                                <span>Total Reward Points</span>
+                                <strong id="invite-total-points">0</strong>
+                            </div>
+                        </article>
+                        <article>
+                            <span>Reward Rule</span>
+                            <strong>1 successful referral = 25 points for the inviter.</strong>
+                        </article>
+                        <article>
+                            <span>Invitation Records</span>
+                            <div id="invite-record-list" class="invite-record-list">
+                                <div class="invite-record-empty">No invite records yet.</div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="runner-panel" class="profile-content-panel hidden-panel">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">Runner Access</p>
+                            <h2>Become a Campus Runner</h2>
+                        </div>
+                    </div>
+                    <div class="profile-highlight-row single-column">
+                        <article class="metric-hero-card">
+                            <span>Role Status</span>
+                            <strong id="runner-role-status">Customer</strong>
+                            <p>Submit a runner application here. The runner dashboard opens only after an admin approves your request.</p>
+                        </article>
+                        <article class="invite-summary-grid">
+                            <div>
+                                <span>Average Runner Score</span>
+                                <strong id="runner-average-score-panel">-</strong>
+                            </div>
+                            <div>
+                                <span>Completed Orders</span>
+                                <strong id="runner-completed-orders-panel">0</strong>
+                            </div>
+                        </article>
+                        <article>
+                            <span>Activation Rule</span>
+                            <strong>Click the button below to submit your application. Admin approval is required before you can accept orders.</strong>
+                        </article>
+                        <article class="runner-action-card">
+                            <button id="apply-runner-btn" class="primary-btn" type="button">Apply to Become a Runner</button>
+                            <button id="revoke-runner-btn" class="ghost-btn hidden-panel" type="button">Disable Runner Access</button>
+                            <a id="runner-entry-btn" class="ghost-btn inline-link hidden-panel" href="/runner.html">Enter Runner Hall</a>
+                            <a id="runner-orders-entry-btn" class="ghost-btn inline-link hidden-panel" href="/runner-orders.html">My Accepted Orders</a>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="address-panel" class="profile-content-panel hidden-panel">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">Saved Address</p>
+                            <h2>Address Information</h2>
+                        </div>
+                    </div>
+                    <div class="profile-highlight-row single-column">
+                        <article>
+                            <span>Common Address</span>
+                            <strong id="profile-address-panel-preview">Not set</strong>
+                        </article>
+                        <article>
+                            <span>Detailed Address Notes</span>
+                            <strong id="profile-detail-panel-preview">Not set</strong>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="support-panel" class="profile-content-panel hidden-panel">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">Help Center</p>
+                            <h2>Support Information</h2>
+                        </div>
+                    </div>
+                    <div class="info-placeholder-card">
+                        <h3>Need help with campus errands?</h3>
+                        <p>Use this section later for order help, account assistance and FAQ links. The layout is ready for your next modules.</p>
+                    </div>
+                </section>
+
+                <section id="feedback-panel" class="profile-content-panel hidden-panel">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">Issue Feedback</p>
+                            <h2>Feedback Entry</h2>
+                        </div>
+                    </div>
+                    <div class="info-placeholder-card">
+                        <h3>Feedback module placeholder</h3>
+                        <p>You can place issue reporting, suggestions or service complaints here after the profile center is finalized.</p>
+                    </div>
+                </section>
+
+                <div id="profile-message" class="message-box" hidden></div>
+            </section>
+        </div>
+    </section>
+</main>
+
+<div id="weekly-card-modal" class="modal-shell hidden-panel">
+    <div class="modal-backdrop" data-close-weekly-card-modal="true"></div>
+    <div class="modal-card fee-modal-card">
+        <button id="close-weekly-card-modal-btn" class="modal-close-btn" type="button">x</button>
+        <div class="section-title-row">
+            <div>
+                <p class="eyebrow">Weekly Card</p>
+                <h3>Activate Weekly Card</h3>
+            </div>
+            <strong class="fee-total">10 pts</strong>
+        </div>
+        <div class="fee-line-list">
+            <div><span>Activation cost</span><strong>10 pts</strong></div>
+            <div><span>Discount per order</span><strong>- 2 pts</strong></div>
+            <div><span>Validity period</span><strong>7 days</strong></div>
+        </div>
+        <p class="fee-footnote">After activation, each order placed during the next 7 days will automatically receive a 2-point discount.</p>
+        <div class="order-submit-row">
+            <button id="confirm-weekly-card-btn" class="primary-btn" type="button">Confirm Activation</button>
+        </div>
+    </div>
+</div>
+
+<script src="/app.js?v=20260807-order-privacy1"></script>
+</body>
+</html>

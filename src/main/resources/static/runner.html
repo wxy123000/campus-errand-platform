@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Runner Hall - Leeds Campus Errand</title>
+    <link rel="stylesheet" href="/styles.css?v=20260820-ui-refresh1">
+</head>
+<body class="dashboard-body">
+<main id="runner-guarded-content" class="home-shell hidden-panel">
+    <section class="home-panel order-home-panel">
+        <header class="home-topbar">
+            <div class="home-brand">
+                <div class="home-brand-badge">RH</div>
+                <div>
+                    <p class="eyebrow">Runner Hall</p>
+                    <h1>Available Orders</h1>
+                </div>
+            </div>
+            <div class="home-top-actions">
+                <a class="ghost-btn inline-link" href="/runner-orders.html">My Accepted Orders</a>
+                <a class="ghost-btn inline-link" href="/home.html">Order Center</a>
+                <a class="ghost-btn inline-link" href="/profile.html">Profile Center</a>
+                <button id="logout-btn" class="primary-btn" type="button">Log out</button>
+            </div>
+        </header>
+
+        <section class="home-types-card order-form-card runner-column-card">
+            <div class="section-title-row">
+                <div>
+                    <p class="eyebrow">Available Orders</p>
+                    <h3>Open for Acceptance</h3>
+                    <p id="home-session-tip">Hello, <span id="home-user-name">Campus Runner</span>. Browse open orders and accept the tasks you want to handle.</p>
+                    <p class="first-use-help" role="note"><strong>First time here?</strong> Review the pickup place, delivery place, time window, and points before accepting an order. Accepted orders move to "My Accepted Orders".</p>
+                </div>
+                <div class="detail-action-row">
+                    <strong id="runner-available-count" class="fee-total inline-total">0</strong>
+                    <select id="runner-sort-select" class="admin-control">
+                        <option value="NEWEST">Newest</option>
+                        <option value="POINTS_HIGH">Points High</option>
+                        <option value="URGENT">Urgent First</option>
+                        <option value="TYPE">Type</option>
+                    </select>
+                    <button id="refresh-runner-orders-btn" class="ghost-btn" type="button">Refresh</button>
+                </div>
+            </div>
+            <div class="runner-filter-bar" aria-label="Filter available orders">
+                <label>
+                    Location
+                    <input id="runner-location-filter" type="search" placeholder="Pickup or delivery location">
+                </label>
+                <label>
+                    Minimum points
+                    <input id="runner-min-points-filter" type="number" min="0" step="1" placeholder="Any">
+                </label>
+                <label>
+                    Time
+                    <select id="runner-time-filter" class="admin-control">
+                        <option value="ALL">All times</option>
+                        <option value="ASAP">ASAP</option>
+                        <option value="WITHIN_ONE_HOUR">Within 1 hour</option>
+                    </select>
+                </label>
+                <label>
+                    Order type
+                    <select id="runner-type-filter" class="admin-control">
+                        <option value="ALL">All types</option>
+                        <option value="COLLECTION_TASK">Parcel Collection</option>
+                        <option value="DELIVERY_DROPOFF_TASK">Item Purchase</option>
+                    </select>
+                </label>
+                <button id="runner-clear-filters" class="ghost-btn" type="button">Clear filters</button>
+            </div>
+            <div id="runner-available-list" class="live-order-list">
+                <div class="invite-record-empty">No available orders right now.</div>
+            </div>
+        </section>
+
+        <div id="runner-message" class="message-box" hidden></div>
+    </section>
+</main>
+
+<script src="/app.js?v=20260817-usability1"></script>
+</body>
+</html>

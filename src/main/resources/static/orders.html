@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Leeds Campus Errand</title>
+    <link rel="stylesheet" href="/styles.css?v=20260820-ui-refresh1">
+</head>
+<body class="dashboard-body">
+<main class="home-shell">
+    <section class="home-panel order-home-panel">
+        <header class="home-topbar">
+            <div class="home-brand">
+                <div class="home-brand-badge">CE</div>
+                <div>
+                    <p class="eyebrow">Leeds Campus Errand</p>
+                    <h1>My Orders</h1>
+                </div>
+            </div>
+            <div class="home-top-actions">
+                <a class="ghost-btn inline-link" href="/home.html">Back to Order Center</a>
+                <a class="ghost-btn inline-link" href="/profile.html">Profile Center</a>
+                <button id="logout-btn" class="primary-btn" type="button">Log out</button>
+            </div>
+        </header>
+
+        <section class="order-home-hero">
+            <div class="home-hero-copy">
+                <span class="hero-tag">ORDER MANAGEMENT</span>
+                <h2><span id="home-user-name">Campus User</span>'s Orders</h2>
+                <p id="home-session-tip">Review each order in detail and track status updates from the assigned runner. Customers can cancel eligible orders, confirm receipt, review the runner, or submit an appeal.</p>
+                <div class="home-hero-note">
+                    Click any order card to view the full breakdown. Order progress is updated by the runner, while customer actions are limited to cancellation, receipt confirmation, rating, and after-sales appeal.
+                </div>
+                <div class="first-use-help" role="note">
+                    <strong>First time here?</strong>
+                    Select an order on the left to see its current status and next action. "Awaiting Confirmation" means the runner has provided the item and is waiting for you to confirm receipt.
+                </div>
+            </div>
+
+            <aside class="order-guide-card">
+                <div class="section-title-row">
+                    <div>
+                        <p class="eyebrow">Workflow</p>
+                        <h3>Order Status Timeline</h3>
+                    </div>
+                </div>
+                <div class="order-guide-grid">
+                    <article>
+                        <strong>Placed</strong>
+                        <p>The customer submits the order and receives a confirmation immediately.</p>
+                    </article>
+                    <article>
+                        <strong>Accepted</strong>
+                        <p>The order has been taken and is ready to be handled by a runner.</p>
+                    </article>
+                    <article>
+                        <strong>Picked Up</strong>
+                        <p>The requested item has been collected and is on the way to the destination.</p>
+                    </article>
+                    <article>
+                        <strong>Delivered</strong>
+                        <p>The order is completed after PIN verification or approved photo proof.</p>
+                    </article>
+                </div>
+                <div class="policy-guide" aria-label="Verification and appeal rules">
+                    <h4>Verification and appeal rules</h4>
+                    <p><strong>PIN delivery:</strong> The customer keeps the one-time PIN and gives it to the runner only at the in-person handover.</p>
+                    <p><strong>Photo proof:</strong> For leave-and-photo delivery, the runner uploads a clear delivery photo. The customer can then confirm receipt.</p>
+                    <p><strong>Appeals:</strong> Only completed orders can be appealed. The customer or assigned runner may submit one appeal with a reason; once resolved, the same order cannot be appealed again. The current prototype does not impose a separate appeal deadline.</p>
+                    <p><strong>Account restrictions:</strong> Customer cancellations and runner give-ups are recorded for administrator review. Administrators may manually apply or remove a three-day account restriction when reviewing misuse.</p>
+                </div>
+            </aside>
+        </section>
+
+        <section class="home-main-grid orders-page-grid">
+            <section class="home-order-preview order-sidebar">
+                <section class="my-orders-live-card">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">Order Archive</p>
+                            <h3>All My Orders</h3>
+                        </div>
+                        <button id="refresh-orders-btn" class="ghost-btn" type="button">Refresh</button>
+                    </div>
+                    <div class="filter-chip-row">
+                        <button class="filter-chip active" type="button" data-order-filter="ALL">All</button>
+                        <button class="filter-chip" type="button" data-order-filter="ACCEPTED">Accepted</button>
+                        <button class="filter-chip" type="button" data-order-filter="PICKED_UP">Picked Up</button>
+                        <button class="filter-chip" type="button" data-order-filter="AWAITING_CUSTOMER_CONFIRMATION">Awaiting Confirmation</button>
+                        <button class="filter-chip" type="button" data-order-filter="DELIVERED">Completed</button>
+                        <button class="filter-chip" type="button" data-order-filter="REVIEWED">Rated</button>
+                        <button class="filter-chip" type="button" data-order-filter="NOT_REVIEWED">Not Rated</button>
+                    </div>
+                    <div id="order-list" class="live-order-list">
+                        <div class="invite-record-empty">Loading orders...</div>
+                    </div>
+                </section>
+            </section>
+
+            <aside class="home-order-preview order-sidebar">
+                <section class="my-orders-live-card">
+                    <div class="section-title-row">
+                        <div>
+                            <p class="eyebrow">Order Detail</p>
+                            <h3>Selected Order</h3>
+                        </div>
+                        <div class="detail-action-row">
+                            <button id="confirm-receipt-btn" class="ghost-btn hidden-panel" type="button">Confirm Receipt</button>
+                            <button id="cancel-order-btn" class="ghost-btn hidden-panel" type="button">Cancel Order</button>
+                            <button id="appeal-order-btn" class="ghost-btn hidden-panel" type="button">Appeal</button>
+                            <button id="review-order-btn" class="ghost-btn hidden-panel" type="button">Review Runner</button>
+                        </div>
+                    </div>
+                    <div id="order-detail-empty" class="invite-record-empty">Select an order from the list to view full detail and the status timeline.</div>
+                    <div id="order-detail-panel" class="order-detail-panel hidden-panel">
+                        <div class="order-detail-grid">
+                            <div><span>Order Number</span><strong id="detail-order-no">-</strong></div>
+                            <div><span>Status</span><strong id="detail-status">-</strong></div>
+                            <div><span>Order Type</span><strong id="detail-order-type">-</strong></div>
+                            <div><span>Created At</span><strong id="detail-created-at">-</strong></div>
+                            <div><span>Runner Status</span><strong id="detail-runner-status">Waiting for pickup</strong></div>
+                            <div><span>Completed At</span><strong id="detail-completed-at">-</strong></div>
+                            <div><span>Runner Name</span><strong id="detail-runner-name">Not assigned</strong></div>
+                            <div><span>Runner Contact</span><strong id="detail-runner-phone">Not available yet</strong></div>
+                            <div><span>Pickup Location</span><strong id="detail-pickup-location">-</strong></div>
+                            <div><span>Delivery Location</span><strong id="detail-delivery-location">-</strong></div>
+                            <div><span>Delivery Method</span><strong id="detail-delivery-method">-</strong></div>
+                            <div><span>Time Window</span><strong id="detail-time-window">-</strong></div>
+                            <div><span>Rating Status</span><strong id="detail-review-status">Not Rated</strong></div>
+                            <div><span>Runner Score</span><strong id="detail-runner-review-score">Not rated</strong></div>
+                            <div class="detail-wide"><span>Pickup Notes</span><strong id="detail-pickup-notes">-</strong></div>
+                            <div class="detail-wide"><span>Delivery Verification</span><strong id="detail-verification">-</strong></div>
+                            <div class="detail-wide"><span>Photo Proof Detail</span><strong id="detail-photo-proof">No photo proof uploaded</strong></div>
+                            <div class="detail-wide"><span>Review Comment</span><strong id="detail-review-comment">No review yet</strong></div>
+                            <div class="detail-wide"><span>Cancel Note</span><strong id="detail-cancel-reason">-</strong></div>
+                            <div class="detail-wide"><span>Appeal Status</span><strong id="detail-appeal-status">None</strong></div>
+                            <div class="detail-wide"><span>Appeal Detail</span><strong id="detail-appeal-detail">No appeal submitted</strong></div>
+                        </div>
+                        <div id="detail-status-line" class="order-progress-line detail-progress-line"></div>
+                        <div class="order-total-row detail-total-row">
+                            <div>
+                                <span class="order-total-label">Total Points</span>
+                                <strong id="detail-fee-total" class="fee-total inline-total">0 pts</strong>
+                            </div>
+                            <button id="detail-amount-details-btn" class="ghost-btn" type="button">Points Details</button>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </section>
+        <div id="order-message" class="message-box" hidden></div>
+    </section>
+</main>
+
+<div id="detail-amount-modal" class="modal-shell hidden-panel">
+    <div class="modal-backdrop" data-close-detail-modal="true"></div>
+    <div class="modal-card fee-modal-card">
+        <button id="close-detail-amount-modal-btn" class="modal-close-btn" type="button">x</button>
+        <div class="section-title-row">
+            <div>
+                <p class="eyebrow">Points Preview</p>
+                <h3>Order Points Details</h3>
+            </div>
+            <strong id="detail-modal-order-total" class="fee-total">0 pts</strong>
+        </div>
+        <div class="fee-line-list detail-fee-list">
+            <div><span>Base service points</span><strong id="detail-fee-base">0 pts</strong></div>
+            <div><span>Fixed location points</span><strong id="detail-fee-distance">0 pts</strong></div>
+            <div><span>Urgency points</span><strong id="detail-fee-urgency">0 pts</strong></div>
+            <div><span>Optional tip</span><strong id="detail-fee-tip">0 pts</strong></div>
+            <div><span>Weekly card discount</span><strong id="detail-fee-weekly-card">0 pts</strong></div>
+        </div>
+    </div>
+</div>
+
+<div id="review-prompt-modal" class="modal-shell hidden-panel">
+    <div class="modal-backdrop" data-close-review-prompt="true"></div>
+    <div class="modal-card fee-modal-card">
+        <button id="close-review-prompt-btn" class="modal-close-btn" type="button">x</button>
+        <div class="section-title-row">
+            <div>
+                <p class="eyebrow">Order Review</p>
+                <h3>Would you like to review this order now?</h3>
+            </div>
+        </div>
+        <p class="fee-footnote">You can go to the review page now, or choose later and use the review button in your order card.</p>
+        <div class="order-submit-row">
+            <button id="review-now-btn" class="primary-btn" type="button">Review Now</button>
+            <button id="review-later-btn" class="ghost-btn" type="button">Later</button>
+        </div>
+    </div>
+</div>
+
+<script src="/app.js?v=20260817-usability1"></script>
+</body>
+</html>

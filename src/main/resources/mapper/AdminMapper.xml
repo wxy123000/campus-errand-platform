@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.campuserrand.mapper.AdminMapper">
+    <sql id="AdminUserColumns">
+        id, username, phone, role, email, verified,
+        common_address AS commonAddress, detail_address AS detailAddress,
+        points, starter_points_granted AS starterPointsGranted, last_weekly_claim_at AS lastWeeklyClaimAt,
+        weekly_card_expires_at AS weeklyCardExpiresAt,
+        invite_code AS inviteCode, referred_by_user_id AS referredByUserId,
+        runner_application_status AS runnerApplicationStatus,
+        runner_application_requested_at AS runnerApplicationRequestedAt,
+        runner_application_reviewed_at AS runnerApplicationReviewedAt,
+        banned, ban_reason AS banReason, banned_at AS bannedAt,
+        cancellation_count AS cancellationCount, runner_give_up_count AS runnerGiveUpCount,
+        created_at AS createdAt, updated_at AS updatedAt
+    </sql>
+
+    <sql id="AdminOrderColumns">
+        eo.id, eo.user_id AS userId, eo.runner_id AS runnerId,
+        cu.username AS customerUsername, cu.phone AS customerPhone,
+        ru.username AS runnerUsername, ru.phone AS runnerPhone,
+        eo.order_no AS orderNo, eo.order_type AS orderType, eo.order_type_label AS orderTypeLabel,
+        eo.pickup_method AS pickupMethod, eo.pickup_location AS pickupLocation, eo.pickup_notes AS pickupNotes,
+        eo.delivery_location AS deliveryLocation,
+        eo.delivery_method AS deliveryMethod, eo.delivery_pin AS deliveryPin, eo.delivery_proof_status AS deliveryProofStatus,
+        eo.photo_proof_url AS photoProofUrl, eo.photo_proof_note AS photoProofNote,
+        eo.time_window_type AS timeWindowType, eo.time_window_label AS timeWindowLabel,
+        eo.preferred_latest_time AS preferredLatestTime, eo.base_fee AS baseFee, eo.distance_fee AS distanceFee,
+        eo.urgency_fee AS urgencyFee, eo.complexity_fee AS complexityFee, eo.tip_fee AS tipFee,
+        eo.weekly_card_discount_fee AS weeklyCardDiscountFee, eo.total_fee AS totalFee,
+        eo.points_cost AS pointsCost, eo.status, eo.status_label AS statusLabel, eo.cancel_reason AS cancelReason,
+        eo.cancelled_at AS cancelledAt, eo.customer_confirmed_at AS customerConfirmedAt, eo.points_transferred_at AS pointsTransferredAt,
+        eo.runner_review_score AS runnerReviewScore, eo.review_comment AS reviewComment, eo.reviewed_at AS reviewedAt,
+        eo.appeal_status AS appealStatus, eo.appeal_reason AS appealReason, eo.appeal_resolution AS appealResolution,
+        eo.appeal_created_at AS appealCreatedAt, eo.appeal_resolved_at AS appealResolvedAt,
+        eo.created_at AS createdAt, eo.updated_at AS updatedAt
+    </sql>
+
+    <sql id="AdminOrderJoins">
+        FROM errand_order eo
+        LEFT JOIN `user` cu ON eo.user_id = cu.id
+        LEFT JOIN `user` ru ON eo.runner_id = ru.id
+    </sql>
+
+    <select id="findAllUsers" resultType="com.campus.campuserrand.entity.User">
+        SELECT <include refid="AdminUserColumns" />
+        FROM `user`
+        ORDER BY created_at DESC
+    </select>
+
+    <insert id="insertAdminUser" parameterType="com.campus.campuserrand.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user` (
+            username, password, phone, role, email, verified,
+            points, starter_points_granted, invite_code, runner_application_status, runner_application_reviewed_at,
+            banned, cancellation_count, runner_give_up_count
+        ) VALUES (
+            #{username}, #{password}, #{phone}, #{role}, #{email}, 1,
+            #{points}, 1, #{inviteCode}, #{runnerApplicationStatus}, #{runnerApplicationReviewedAt},
+            0, 0, 0
+        )
+    </insert>
+
+    <update id="updateAdminUser" parameterType="com.campus.campuserrand.entity.User">
+        UPDATE `user`
+        SET username = #{username},
+            phone = #{phone},
+            role = #{role},
+            points = #{points},
+            verified = #{verified},
+            runner_application_status = #{runnerApplicationStatus},
+            runner_application_reviewed_at = #{runnerApplicationReviewedAt},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteUser">
+        DELETE FROM `user` WHERE id = #{userId}
+    </delete>
+
+    <select id="findAllOrders" resultType="com.campus.campuserrand.entity.ErrandOrder">
+        SELECT <include refid="AdminOrderColumns" />
+        <include refid="AdminOrderJoins" />
+        ORDER BY eo.created_at DESC
+    </select>
+
+    <insert id="insertAdminOrder" parameterType="com.campus.campuserrand.entity.ErrandOrder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO errand_order (
+            user_id, runner_id, order_no, order_type, order_type_label, pickup_method, pickup_location, pickup_notes,
+            delivery_location, delivery_method, delivery_pin, delivery_proof_status, photo_proof_url, photo_proof_note,
+            time_window_type, time_window_label, preferred_latest_time,
+            base_fee, distance_fee, urgency_fee, complexity_fee, tip_fee, weekly_card_discount_fee, total_fee, points_cost,
+            status, status_label, cancel_reason, cancelled_at, customer_confirmed_at, points_transferred_at
+        ) VALUES (
+            #{userId}, #{runnerId}, #{orderNo}, #{orderType}, #{orderTypeLabel}, 'MANUAL_ENTRY', #{pickupLocation}, #{pickupNotes},
+            #{deliveryLocation}, #{deliveryMethod}, #{deliveryPin}, #{deliveryProofStatus}, NULL, NULL,
+            'ADMIN_SET', #{timeWindowLabel}, NULL,
+            0, 0, 0, 0, 0, 0, #{totalFee}, #{pointsCost},
+            #{status}, #{statusLabel}, NULL, NULL, #{customerConfirmedAt}, NULL
+        )
+    </insert>
+
+    <update id="updateAdminOrder" parameterType="com.campus.campuserrand.entity.ErrandOrder">
+        UPDATE errand_order
+        SET user_id = #{userId},
+            runner_id = #{runnerId},
+            order_type = #{orderType},
+            order_type_label = #{orderTypeLabel},
+            pickup_location = #{pickupLocation},
+            pickup_notes = #{pickupNotes},
+            delivery_location = #{deliveryLocation},
+            delivery_method = #{deliveryMethod},
+            delivery_proof_status = #{deliveryProofStatus},
+            time_window_label = #{timeWindowLabel},
+            total_fee = #{totalFee},
+            points_cost = #{pointsCost},
+            status = #{status},
+            status_label = #{statusLabel},
+            customer_confirmed_at = #{customerConfirmedAt},
+            updated_at = NOW()
+        WHERE order_no = #{orderNo}
+    </update>
+
+    <delete id="deleteOrder">
+        DELETE FROM errand_order WHERE order_no = #{orderNo}
+    </delete>
+
+    <select id="findReviewOrders" resultType="com.campus.campuserrand.entity.ErrandOrder">
+        SELECT <include refid="AdminOrderColumns" />
+        <include refid="AdminOrderJoins" />
+        WHERE eo.status = 'DELIVERED' OR eo.runner_review_score IS NOT NULL OR eo.review_comment IS NOT NULL
+        ORDER BY COALESCE(eo.reviewed_at, eo.updated_at) DESC
+    </select>
+
+    <select id="loadStats" resultType="com.campus.campuserrand.dto.AdminStatsResponse">
+        SELECT
+            (SELECT COUNT(1) FROM `user`) AS totalUsers,
+            (SELECT COUNT(1) FROM `user` WHERE UPPER(role) = 'RUNNER') AS runnerUsers,
+            (SELECT COUNT(1) FROM `user` WHERE UPPER(role) = 'ADMIN') AS adminUsers,
+            (SELECT COUNT(1) FROM errand_order) AS totalOrders,
+            (SELECT COUNT(1) FROM errand_order WHERE status IN ('PLACED', 'ACCEPTED', 'PICKED_UP', 'AWAITING_CUSTOMER_CONFIRMATION')) AS activeOrders,
+            (SELECT COUNT(1) FROM errand_order WHERE status = 'DELIVERED') AS completedOrders,
+            (SELECT COUNT(1) FROM errand_order WHERE status LIKE 'CANCELLED%') AS cancelledOrders,
+            (SELECT COUNT(1) FROM `user` WHERE banned = 1) AS bannedUsers,
+            (SELECT COUNT(1) FROM errand_order WHERE appeal_status = 'OPEN') AS openAppeals,
+            (SELECT COALESCE(SUM(points_cost), 0) FROM errand_order) AS totalPointsSpent
+    </select>
+
+    <update id="updateUserRoleAndPoints">
+        UPDATE `user`
+        SET role = #{role},
+            points = #{points},
+            updated_at = NOW()
+        WHERE id = #{userId}
+    </update>
+
+    <update id="approveRunnerApplication">
+        UPDATE `user`
+        SET role = 'RUNNER',
+            runner_application_status = 'APPROVED',
+            runner_application_reviewed_at = NOW(),
+            updated_at = NOW()
+        WHERE id = #{userId}
+          AND runner_application_status = 'PENDING'
+    </update>
+
+    <update id="rejectRunnerApplication">
+        UPDATE `user`
+        SET runner_application_status = 'REJECTED',
+            runner_application_reviewed_at = NOW(),
+            updated_at = NOW()
+        WHERE id = #{userId}
+          AND runner_application_status = 'PENDING'
+    </update>
+
+    <update id="cancelOrderByAdmin">
+        UPDATE errand_order
+        SET status = 'CANCELLED_BY_ADMIN',
+            status_label = 'Cancelled by Admin',
+            runner_id = NULL,
+            cancel_reason = #{reason},
+            cancelled_at = NOW(),
+            updated_at = NOW()
+        WHERE order_no = #{orderNo}
+          AND status NOT IN ('DELIVERED', 'CANCELLED_BY_CUSTOMER', 'CANCELLED_BY_ADMIN')
+    </update>
+
+    <update id="resolveAppeal">
+        UPDATE errand_order
+        SET appeal_status = 'RESOLVED',
+            appeal_resolution = #{resolution},
+            appeal_resolved_at = NOW(),
+            updated_at = NOW()
+        WHERE order_no = #{orderNo}
+          AND appeal_status = 'OPEN'
+    </update>
+</mapper>

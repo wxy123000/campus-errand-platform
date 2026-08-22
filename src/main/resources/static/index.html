@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leeds Campus Errand</title>
+    <link rel="stylesheet" href="/styles.css?v=20260820-auth-restore1">
+</head>
+<body class="landing-body">
+<main class="auth-shell">
+    <section class="hero-panel">
+        <div class="brand-pill">Leeds Campus Errand</div>
+        <h1>Campus Errand Service Platform</h1>
+        <p>Built for University of Leeds students to handle campus pickup, errands and day-to-day coordination with less friction.</p>
+        <div class="hero-features">
+            <article>
+                <span>01</span>
+                <h2>Secure Access</h2>
+                <p>Only `@leeds.ac.uk` email addresses are allowed, and registration requires a verification code.</p>
+            </article>
+            <article>
+                <span>02</span>
+                <h2>Lightweight Login</h2>
+                <p>Your session stays active for 24 hours, which works well for everyday campus errands.</p>
+            </article>
+            <article>
+                <span>03</span>
+                <h2>Ready to Use</h2>
+                <p>The frontend and backend are already connected, so this page supports real registration and login.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="form-panel">
+        <div class="tabs">
+            <a class="tab active" href="/index.html">Login</a>
+            <a class="tab" href="/register.html">Register</a>
+        </div>
+
+        <div class="form-card">
+            <div class="card-head">
+                <p class="eyebrow">Sign In</p>
+                <h2>Welcome Back</h2>
+                <p>Sign in with your University of Leeds email to continue.</p>
+            </div>
+
+            <form id="login-form" class="auth-form">
+                <label>
+                    <span>Campus Email</span>
+                    <input type="email" name="email" placeholder="yourname@leeds.ac.uk" required>
+                </label>
+                <label>
+                    <span>Password</span>
+                    <input type="password" name="password" placeholder="Enter your password" required>
+                </label>
+                <button type="submit" class="primary-btn">Sign In</button>
+            </form>
+
+            <div id="login-message" class="message-box" hidden></div>
+
+            <div class="minor-link">
+                No account yet? <a href="/register.html">Create one</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="/app.js?v=20260807-order-privacy1"></script>
+</body>
+</html>

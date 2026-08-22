@@ -1,0 +1,39 @@
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: campus-errand
+
+  web:
+    resources:
+      chain:
+        cache: false
+      cache:
+        period: 0
+        cachecontrol:
+          no-store: true
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/testdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+
+app:
+  upload:
+    directory: uploads
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.campus.campuserrand.entity
+
+logging:
+  level:
+    com.campus.campuserrand.mapper: debug
