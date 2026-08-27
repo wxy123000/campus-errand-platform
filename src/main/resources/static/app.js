@@ -1087,7 +1087,7 @@ function applyRunnerAvailableFilters() {
     renderRunnerAvailableOrders(filterRunnerAvailableOrders(document.__runnerAvailableOrders || []));
 }
 
-function renderRunnerMyOrders(orders) {
+function renderRunnerMyOrders(orders, statusFilter = "ALL") {
     const list = document.getElementById("runner-my-list");
     const completedList = document.getElementById("runner-completed-list");
     const count = document.getElementById("runner-accepted-count");
@@ -1098,14 +1098,28 @@ function renderRunnerMyOrders(orders) {
     document.__runnerMyOrders = safeOrders;
     const activeOrders = safeOrders.filter((order) => order.status !== "DELIVERED");
     const completedOrders = safeOrders.filter((order) => order.status === "DELIVERED");
+    const filteredOrders = statusFilter === "ALL"
+        ? safeOrders
+        : statusFilter === "REVIEWED"
+            ? safeOrders.filter((order) => order.status === "DELIVERED" && order.runnerReviewScore != null)
+            : statusFilter === "NOT_REVIEWED"
+                ? safeOrders.filter((order) => order.status === "DELIVERED" && order.runnerReviewScore == null)
+                : safeOrders.filter((order) => order.status === statusFilter);
     if (count) {
         count.textContent = String(activeOrders.length);
     }
 
-    if (safeOrders.length === 0) {
-        list.innerHTML = '<div class="invite-record-empty">You have not accepted any orders yet.</div>';
+    if (filteredOrders.length === 0) {
+        const emptyMessage = statusFilter === "REVIEWED"
+            ? "No rated orders yet."
+            : statusFilter === "NOT_REVIEWED"
+                ? "No completed orders are waiting for a rating."
+                : statusFilter === "ALL"
+                    ? "You have not accepted any orders yet."
+                    : "No orders match this status.";
+        list.innerHTML = `<div class="invite-record-empty">${emptyMessage}</div>`;
     } else {
-          list.innerHTML = safeOrders.map((order) => {
+          list.innerHTML = filteredOrders.map((order) => {
             const delivered = order.status === "DELIVERED";
             return `
                 <article class="live-order-card runner-order-card clickable-runner-card ${delivered ? "completed-runner-card" : ""}" data-runner-order-no="${order.orderNo || ""}">
@@ -2265,6 +2279,7 @@ if (runnerAvailableList || runnerMyList) {
     const isRunnerHallPage = Boolean(runnerAvailableList);
     const isRunnerOrdersPage = Boolean(runnerMyList);
     let selectedRunnerOrderNo = null;
+    let currentRunnerOrderFilter = "ALL";
 
     const loadRunnerData = async () => {
         const auth = getAuth();
@@ -2312,7 +2327,7 @@ if (runnerAvailableList || runnerMyList) {
                     Authorization: `Bearer ${auth.token}`
                 }
             });
-            renderRunnerMyOrders(myOrders);
+            renderRunnerMyOrders(myOrders, currentRunnerOrderFilter);
             renderRunnerReviewRecords(myOrders);
             const runnerStats = computeRunnerPerformance(myOrders);
             const completedCount = document.getElementById("runner-completed-count");
@@ -2342,6 +2357,19 @@ if (runnerAvailableList || runnerMyList) {
             });
         });
     }
+
+    document.querySelectorAll("[data-runner-order-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+            currentRunnerOrderFilter = button.dataset.runnerOrderFilter || "ALL";
+            document.querySelectorAll("[data-runner-order-filter]").forEach((item) => {
+                item.classList.toggle("active", item === button);
+            });
+            renderRunnerMyOrders(document.__runnerMyOrders || [], currentRunnerOrderFilter);
+            document.querySelectorAll(".clickable-runner-card").forEach((card) => {
+                card.classList.toggle("active-order-card", card.dataset.runnerOrderNo === selectedRunnerOrderNo);
+            });
+        });
+    });
 
     if (runnerSortSelect) {
         runnerSortSelect.addEventListener("change", () => {

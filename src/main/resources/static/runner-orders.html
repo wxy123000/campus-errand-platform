@@ -34,6 +34,15 @@
                     </div>
                     <button id="refresh-runner-orders-btn" class="ghost-btn" type="button">Refresh</button>
                 </div>
+                <div class="filter-chip-row" aria-label="Filter accepted orders by status">
+                    <button class="filter-chip active" type="button" data-runner-order-filter="ALL">All</button>
+                    <button class="filter-chip" type="button" data-runner-order-filter="ACCEPTED">Accepted</button>
+                    <button class="filter-chip" type="button" data-runner-order-filter="PICKED_UP">Picked Up</button>
+                    <button class="filter-chip" type="button" data-runner-order-filter="AWAITING_CUSTOMER_CONFIRMATION">Awaiting Confirmation</button>
+                    <button class="filter-chip" type="button" data-runner-order-filter="DELIVERED">Completed</button>
+                    <button class="filter-chip" type="button" data-runner-order-filter="REVIEWED">Rated</button>
+                    <button class="filter-chip" type="button" data-runner-order-filter="NOT_REVIEWED">Not Rated</button>
+                </div>
                 <div id="runner-my-list" class="live-order-list">
                     <div class="invite-record-empty">You have not accepted any orders yet.</div>
                 </div>
