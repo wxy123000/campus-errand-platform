@@ -91,18 +91,27 @@ public class OrderService {
         BigDecimal urgencyFee = resolveUrgencyFee(request.getTimeWindowType());
         BigDecimal tipFee = normalizeMoney(request.getOptionalTip());
         BigDecimal weeklyCardDiscount = isWeeklyCardActive(user) ? WEEKLY_CARD_DISCOUNT : BigDecimal.ZERO;
-        BigDecimal totalFee = baseFee.add(distanceFee).add(urgencyFee).add(tipFee).subtract(weeklyCardDiscount).max(BigDecimal.ONE);
+        BigDecimal totalFee = baseFee
+                .add(distanceFee)
+                .add(urgencyFee)
+                .add(tipFee)
+                .subtract(weeklyCardDiscount)
+                .max(BigDecimal.ONE);
         int pointsCost = totalFee.intValue();
 
-        int deducted = authMapper.deductPointsIfEnough(user.getId(), pointsCost);
+        int deducted = authMapper.deductPointsIfEnough(
+                user.getId(),
+                pointsCost
+        );
         if (deducted == 0) {
-            throw new BusinessException("You do not have enough points to place this order.");
+            throw new BusinessException(
+                    "You do not have enough points to place this order."
+            );
         }
 
         order.setBaseFee(baseFee);
         order.setDistanceFee(distanceFee);
         order.setUrgencyFee(urgencyFee);
-        order.setComplexityFee(BigDecimal.ZERO);
         order.setTipFee(tipFee);
         order.setWeeklyCardDiscountFee(weeklyCardDiscount);
         order.setTotalFee(totalFee);
@@ -179,9 +188,16 @@ public class OrderService {
             throw new BusinessException("You cannot accept your own order.");
         }
 
-        int updated = orderMapper.acceptOrder(order.getId(), runner.getId(), "ACCEPTED", "Accepted");
+        int updated = orderMapper.acceptOrder(
+                order.getId(),
+                runner.getId(),
+                "ACCEPTED",
+                "Accepted"
+        );
         if (updated == 0) {
-            throw new BusinessException("This order has already been accepted by another runner.");
+            throw new BusinessException(
+                    "This order has already been accepted by another runner."
+            );
         }
 
         OrderResponse response = new OrderResponse();

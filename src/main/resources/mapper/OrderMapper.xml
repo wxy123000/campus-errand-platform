@@ -14,7 +14,7 @@
         eo.photo_proof_url AS photoProofUrl, eo.photo_proof_note AS photoProofNote,
         eo.time_window_type AS timeWindowType, eo.time_window_label AS timeWindowLabel,
         eo.preferred_latest_time AS preferredLatestTime, eo.base_fee AS baseFee, eo.distance_fee AS distanceFee,
-        eo.urgency_fee AS urgencyFee, eo.complexity_fee AS complexityFee, eo.tip_fee AS tipFee,
+        eo.urgency_fee AS urgencyFee, eo.tip_fee AS tipFee,
         eo.weekly_card_discount_fee AS weeklyCardDiscountFee, eo.total_fee AS totalFee,
         eo.points_cost AS pointsCost, eo.status, eo.status_label AS statusLabel, eo.cancel_reason AS cancelReason,
         eo.cancelled_at AS cancelledAt, eo.customer_confirmed_at AS customerConfirmedAt, eo.points_transferred_at AS pointsTransferredAt,
@@ -35,13 +35,13 @@
             user_id, runner_id, order_no, order_type, order_type_label, pickup_method, pickup_location, pickup_notes,
             delivery_location,
             delivery_method, delivery_pin, delivery_proof_status, photo_proof_url, photo_proof_note, time_window_type, time_window_label,
-            preferred_latest_time, base_fee, distance_fee, urgency_fee, complexity_fee, tip_fee, weekly_card_discount_fee, total_fee, points_cost,
+            preferred_latest_time, base_fee, distance_fee, urgency_fee, tip_fee, weekly_card_discount_fee, total_fee, points_cost,
             status, status_label, cancel_reason, cancelled_at, customer_confirmed_at, points_transferred_at
         ) VALUES (
             #{userId}, #{runnerId}, #{orderNo}, #{orderType}, #{orderTypeLabel}, #{pickupMethod}, #{pickupLocation}, #{pickupNotes},
             #{deliveryLocation},
             #{deliveryMethod}, #{deliveryPin}, #{deliveryProofStatus}, #{photoProofUrl}, #{photoProofNote}, #{timeWindowType}, #{timeWindowLabel},
-            #{preferredLatestTime}, #{baseFee}, #{distanceFee}, #{urgencyFee}, #{complexityFee}, #{tipFee}, #{weeklyCardDiscountFee}, #{totalFee}, #{pointsCost},
+            #{preferredLatestTime}, #{baseFee}, #{distanceFee}, #{urgencyFee}, #{tipFee}, #{weeklyCardDiscountFee}, #{totalFee}, #{pointsCost},
             #{status}, #{statusLabel}, #{cancelReason}, #{cancelledAt}, #{customerConfirmedAt}, #{pointsTransferredAt}
         )
     </insert>

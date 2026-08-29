@@ -32,7 +32,6 @@ public class ErrandOrder {
     private BigDecimal baseFee;
     private BigDecimal distanceFee;
     private BigDecimal urgencyFee;
-    private BigDecimal complexityFee;
     private BigDecimal tipFee;
     private BigDecimal weeklyCardDiscountFee;
     private BigDecimal totalFee;

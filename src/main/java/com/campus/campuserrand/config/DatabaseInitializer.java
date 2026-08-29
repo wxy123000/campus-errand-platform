@@ -131,7 +131,6 @@ public class DatabaseInitializer {
                     base_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                     distance_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                     urgency_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-                    complexity_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                     tip_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                     weekly_card_discount_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                     total_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -142,7 +141,6 @@ public class DatabaseInitializer {
                     cancelled_at DATETIME NULL,
                     customer_confirmed_at DATETIME NULL,
                     points_transferred_at DATETIME NULL,
-                    review_score INT NULL,
                     runner_review_score INT NULL,
                     review_comment VARCHAR(1000) NULL,
                     reviewed_at DATETIME NULL,
@@ -162,7 +160,6 @@ public class DatabaseInitializer {
         addColumnIfMissing("errand_order", "points_cost", "ALTER TABLE errand_order ADD COLUMN points_cost INT NOT NULL DEFAULT 0");
         addColumnIfMissing("errand_order", "weekly_card_discount_fee", "ALTER TABLE errand_order ADD COLUMN weekly_card_discount_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00");
         addColumnIfMissing("errand_order", "points_transferred_at", "ALTER TABLE errand_order ADD COLUMN points_transferred_at DATETIME NULL");
-        addColumnIfMissing("errand_order", "review_score", "ALTER TABLE errand_order ADD COLUMN review_score INT NULL");
         addColumnIfMissing("errand_order", "runner_review_score", "ALTER TABLE errand_order ADD COLUMN runner_review_score INT NULL");
         addColumnIfMissing("errand_order", "review_comment", "ALTER TABLE errand_order ADD COLUMN review_comment VARCHAR(1000) NULL");
         addColumnIfMissing("errand_order", "reviewed_at", "ALTER TABLE errand_order ADD COLUMN reviewed_at DATETIME NULL");
